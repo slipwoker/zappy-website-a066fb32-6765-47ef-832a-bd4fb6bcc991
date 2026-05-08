@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>ארכיון הדגשים — אוריין_9</title>
+    <meta name="description" content="ארכיון הדגשים | אוריין_9. ספורט / כדורגל">
+    <meta name="keywords" content="ארכיון הדגשים, ספורט / כדורגל, ספורט כדורגל, חולצות כדורגל, חולצות כדורגל לקבוצות נוער">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'a066fb32-6765-47ef-832a-bd4fb6bcc991',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="ארכיון הדגשים — אוריין_9">
+    <meta property="og:description" content="ארכיון הדגשים | אוריין_9. ספורט / כדורגל">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ארכיון הדגשים — אוריין_9">
+    <meta name="twitter:description" content="ארכיון הדגשים | אוריין_9. ספורט / כדורגל">
+    <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: var(--text-dark, #333) !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+      [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 10px !important; padding-right: 28px !important; }
+      .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus (exclude catalog sub-menus that use <a> children instead of <li>) */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))):not(:has(> a)), .sub-menu:not(:has(li)):not(:has(> a)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .navbar .sub-menu.mobile-expanded, .nav-menu .sub-menu.mobile-expanded, #navMenu .sub-menu.mobile-expanded { max-height: none !important; overflow-y: visible !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; position: relative !important; min-height: 44px !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; min-width: 0 !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; min-width: 0 !important; padding: 0 !important; line-height: inherit !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu, .navbar li:has(.sub-menu) > .sub-menu, #navMenu li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: auto !important; background: transparent !important; border: none !important; cursor: pointer !important; color: var(--text-dark) !important; position: static !important; flex-shrink: 0 !important; align-self: stretch !important; z-index: 2 !important; padding: 0 !important; margin: 0 !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: var(--text-dark) !important; white-space: normal !important; }
+        .sub-menu .zappy-nav-child > a { padding-left: 28px !important; font-size: 0.9em !important; opacity: 0.85 !important; }
+        [dir="rtl"] .sub-menu .zappy-nav-child > a, html[lang="he"] .sub-menu .zappy-nav-child > a, html[lang="ar"] .sub-menu .zappy-nav-child > a { padding-left: 0 !important; padding-right: 28px !important; }
+        .sub-menu .zappy-nav-parent > a { font-weight: 600 !important; }
+        .nav-menu.active, #navMenu.active { max-width: 100vw !important; overflow-x: hidden !important; box-sizing: border-box !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: var(--text-dark) !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      html[dir="rtl"] .whatsapp-float { right: 20px !important; left: auto !important; }
+      html[dir="ltr"] .whatsapp-float, html:not([dir]) .whatsapp-float { left: 20px !important; right: auto !important; }
+      html[dir="rtl"] #mic-access-tool-general-button, html[dir="rtl"] .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="rtl"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="rtl"] ._access-icon { left: 20px !important; right: auto !important; }
+      html[dir="ltr"] #mic-access-tool-general-button, html[dir="ltr"] .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool .mic-access-tool-general-button,
+      html[dir="ltr"] #mic-init-access-tool #mic-access-tool-general-button,
+      html[dir="ltr"] ._access-icon,
+      html:not([dir]) #mic-access-tool-general-button, html:not([dir]) .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool .mic-access-tool-general-button,
+      html:not([dir]) #mic-init-access-tool #mic-access-tool-general-button,
+      html:not([dir]) ._access-icon { right: 20px !important; left: auto !important; }
+      @media (max-width: 768px) { .whatsapp-float { display: flex !important; } }
+      @media (min-width: 769px) { .whatsapp-float { display: flex !important; } }
+      @media (max-width: 768px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+      @media (min-width: 769px) {
+        #mic-access-tool-general-button, .mic-access-tool-general-button,
+        #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+        ._access-icon { display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
+        #mic-access-tool-box.opened-mic-access-tool, .mic-access-tool-box.opened-mic-access-tool,
+        #mic-init-access-tool #mic-access-tool-box.opened-mic-access-tool {
+          visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;
+        }
+      }
+    </style>
+</head>
+<body>
+
+
+    <div class="mobile-search-panel" id="mobile-search-panel">
+      <div class="search-wrapper">
+        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="חיפוש">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+        </button>
+        <button class="close-search" id="close-mobile-search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="search-results" id="mobile-search-results"></div>
+    </div>
+  
+<script>window.ZAPPY_WEBSITE_ID = "a066fb32-6765-47ef-832a-bd4fb6bcc991";window.ZAPPY_API_BASE = "https://api.zappy5.com";</script>
+  <nav class="navbar" dir="rtl">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display: none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+
+  <button class="phone-header-btn" data-phone="[business_phone]" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+
+  <div class="nav-container">
+    <div class="nav-right-group"><div class="nav-brand">
+      <a href="/" class="logo-link">
+        <img src="/assets/9-logo.webp" alt="אוריין_9" class="logo">
+      </a>
+    </div><ul class="nav-menu" id="navMenu">
+
+    <li class="menu-item-has-children zappy-products-dropdown">
+      <a href="/products">
+        מוצרים
+        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </a>
+      <ul class="sub-menu" id="zappy-nav-category-links">
+        <li><a href="/products">כל המוצרים</a></li>
+        <!-- Categories will be loaded dynamically -->
+      </ul>
+    </li>
+  <li><a href="/">Home</a></li><li><a href="/archive-highlights">ארכיון הדגשים</a></li><li><a href="/about">אודות</a></li><li><a href="/contact">Contact</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <div class="nav-search-results" id="nav-search-results"></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg></button></div></div>
+
+    
+
+    
+  </div>
+</nav>
+<script>
+
+// Navbar Mobile Menu Toggle and Contrast Fix
+(function() {
+  // Use 'load' event instead of 'DOMContentLoaded' to ensure we run AFTER all other scripts
+  window.addEventListener('load', function() {
+    
+    // FIX MOBILE BUTTON CONTRAST
+    // Detect navbar background color and apply contrasting color to mobile buttons
+    const navbar = document.querySelector('.navbar, nav, header');
+    if (!navbar) {
+      console.log('[Navbar] Navbar element not found');
+      return;
+    }
+    
+    // DECLARE VARIABLES EARLY to avoid Temporal Dead Zone errors
+    // These are used in multiple places below
+    let mobileToggle = document.getElementById('mobileToggle') ||
+                       document.querySelector('.mobile-toggle') ||
+                       document.querySelector('.hamburger') ||
+                       document.querySelector('.hamburger-menu') ||
+                       document.querySelector('.menu-toggle') ||
+                       document.querySelector('.burger-menu') ||
+                       document.querySelector('[aria-label="Menu"]') ||
+                       document.querySelector('[aria-label="תפריט"]');
+    
+    const phoneBtn = document.querySelector('.phone-header-btn');
+    
+    const computedStyle = window.getComputedStyle(navbar);
+    let bgColor = computedStyle.backgroundColor;
+    
+    console.log('[Navbar] Initial navbar background:', bgColor);
+    
+    // Check if background is transparent or rgba with 0 alpha
+    const isTransparent = bgColor === 'transparent' || 
+                         bgColor === 'rgba(0, 0, 0, 0)' ||
+                         (bgColor.startsWith('rgba') && bgColor.includes(', 0)'));
+    
+    if (isTransparent) {
+      // Check for background-image or gradient
+      const bgImage = computedStyle.backgroundImage;
+      if (bgImage && bgImage !== 'none') {
+        console.log('[Navbar] Navbar has background image/gradient, using dark text');
+        bgColor = 'rgb(240, 240, 240)'; // Assume light background
+      } else {
+        // Transparent navbar - check body background
+        const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+        console.log('[Navbar] Navbar transparent, using body background:', bodyBg);
+        bgColor = bodyBg;
+      }
+    }
+    
+    // Calculate luminance to determine if background is light or dark
+    const rgb = bgColor.match(/\d+/g);
+    if (rgb && rgb.length >= 3) {
+      const r = parseInt(rgb[0]);
+      const g = parseInt(rgb[1]);
+      const b = parseInt(rgb[2]);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      
+      // Mobile button colors are set by Claude's AI-generated CSS (same as .nav-menu a)
+      // No dynamic color overrides needed - colors come from the generated navbar CSS
+      console.log('[Navbar] Mobile button colors preserved from Claude CSS (luminance:', luminance.toFixed(2) + ')');
+      
+      // FIX ICON SIZES - Ensure SVGs are properly sized and visible
+      // INJECT CRITICAL CSS TO OVERRIDE ANY CONFLICTING RULES
+      const criticalCSS = document.createElement('style');
+      criticalCSS.id = 'zappy-mobile-nav-fix';
+      const htmlLang = document.documentElement.lang || 'en';
+      const htmlDir = document.documentElement.dir || 'ltr';
+      // Check both dir attribute AND lang for RTL detection
+      // dir="rtl" is the most reliable indicator
+      const isRTL = htmlDir === 'rtl' || htmlLang === 'he' || htmlLang === 'ar';
+      
+      criticalCSS.textContent = `
+        /* Hide mobile buttons on desktop, show only on mobile */
+        @media (min-width: 769px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            display: none !important;
+          }
+        }
+        
+        /* Show and position mobile buttons correctly on mobile */
+        @media (max-width: 768px) {
+          .mobile-toggle,
+          .phone-header-btn {
+            position: absolute !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            margin-top: auto !important;
+            margin-bottom: auto !important;
+            z-index: 1001 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 50% !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 6px !important;
+            background: none !important;
+            color: var(--nav-text, var(--text-dark)) !important;
+            touch-action: manipulation !important;
+            -webkit-tap-highlight-color: transparent !important;
+          }
+          
+          /* LTR positioning (default): hamburger LEFT, phone RIGHT */
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .mobile-toggle,
+          html[dir="ltr"] .mobile-toggle {
+            left: 12px !important;
+            right: auto !important;
+          }
+          html:not([dir="rtl"]):not([lang="he"]):not([lang="ar"]) .phone-header-btn,
+          html[dir="ltr"] .phone-header-btn {
+            right: 12px !important;
+            left: auto !important;
+          }
+          
+          /* RTL positioning: hamburger RIGHT, phone LEFT */
+          html[dir="rtl"] .mobile-toggle,
+          html[lang="he"] .mobile-toggle,
+          html[lang="ar"] .mobile-toggle {
+            right: 12px !important;
+            left: auto !important;
+          }
+          html[dir="rtl"] .phone-header-btn,
+          html[lang="he"] .phone-header-btn,
+          html[lang="ar"] .phone-header-btn {
+            left: 12px !important;
+            right: auto !important;
+          }
+          
+          /* CRITICAL: Ensure nav-container has min-height on mobile */
+          /* All children are positioned absolutely/fixed on mobile, so height:auto collapses to 0 */
+          .nav-container {
+            min-height: 70px !important;
+            position: relative !important;
+          }
+          
+          /* Ensure SVG icons are properly sized and inherit color */
+          .mobile-toggle svg,
+          .phone-header-btn svg {
+            width: 24px !important;
+            height: 24px !important;
+            /* Don't force display - let JavaScript control hamburger/close toggle */
+          }
+          
+          /* Reset nav-cta-container on mobile - remove desktop box-shadow/padding */
+          /* that creates a visible ghost box when CTA button is hidden */
+          .nav-cta-container {
+            box-shadow: none !important;
+            padding: 0 !important;
+          }
+          
+          /* Hide nav-cta-container entirely on mobile when there's no lang-switcher */
+          /* (only the CTA button is inside, and it's hidden on mobile) */
+          .nav-cta-container:not(:has(.lang-switcher)) {
+            display: none !important;
+          }
+          
+          /* CRITICAL: Prevent hero image fade gradient from bleeding over headline text */
+          /* The .image-fade-gradient has bottom: -30px (extends below parent) */
+          /* On mobile stacked layout, this overlaps the h1 text below the image */
+          .hero-image-column {
+            overflow: hidden !important;
+          }
+          .image-fade-gradient {
+            bottom: 0 !important;
+          }
+          
+          /* Hide desktop language switcher on mobile - hamburger menu handles it */
+          /* High specificity to override stored CSS */
+          .lang-switcher,
+          .nav-cta-container .lang-switcher,
+          .nav-container .lang-switcher,
+          .navbar .lang-switcher,
+          .navbar .nav-cta-container .lang-switcher {
+            display: none !important;
+          }
+        }
+      `;
+      
+      // Remove existing fix if present and inject new one
+      const existing = document.getElementById('zappy-mobile-nav-fix');
+      if (existing) existing.remove();
+      document.head.appendChild(criticalCSS);
+      
+      console.log('[Navbar] Critical CSS injected for mobile nav positioning');
+      
+      // ONLY apply inline positioning styles on mobile viewport
+      // On desktop, the CSS handles hiding these buttons with display: none
+      // Inline styles were breaking desktop layout by overriding CSS
+      const isMobileViewport = window.innerWidth <= 768;
+      
+      if (mobileToggle) {
+        // Icon sizing applies to all viewports for consistency
+        const hamburgerIcon = mobileToggle.querySelector('.hamburger-icon');
+        const closeIcon = mobileToggle.querySelector('.close-icon');
+        
+        if (hamburgerIcon) {
+          hamburgerIcon.style.setProperty('width', '24px', 'important');
+          hamburgerIcon.style.setProperty('height', '24px', 'important');
+          hamburgerIcon.style.setProperty('display', 'block', 'important'); // Show hamburger by default
+        }
+        if (closeIcon) {
+          closeIcon.style.setProperty('width', '24px', 'important');
+          closeIcon.style.setProperty('height', '24px', 'important');
+          closeIcon.style.setProperty('display', 'none', 'important'); // Hide close icon by default
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          mobileToggle.style.setProperty('position', 'absolute', 'important');
+          mobileToggle.style.setProperty('top', '0', 'important');
+          mobileToggle.style.setProperty('bottom', '0', 'important');
+          mobileToggle.style.setProperty('margin-top', 'auto', 'important');
+          mobileToggle.style.setProperty('margin-bottom', 'auto', 'important');
+          mobileToggle.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          
+          console.log('[Navbar] Mobile toggle positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          mobileToggle.style.removeProperty('position');
+          mobileToggle.style.removeProperty('top');
+          mobileToggle.style.removeProperty('transform');
+          mobileToggle.style.removeProperty('z-index');
+          mobileToggle.style.removeProperty('left');
+          mobileToggle.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared mobile toggle inline positioning');
+        }
+      }
+      
+      if (phoneBtn) {
+        // Icon sizing applies to all viewports
+        const phoneIcon = phoneBtn.querySelector('svg');
+        if (phoneIcon) {
+          phoneIcon.style.width = '24px';
+          phoneIcon.style.height = '24px';
+          phoneIcon.setAttribute('width', '24');
+          phoneIcon.setAttribute('height', '24');
+        }
+        
+        // ONLY set positioning inline styles on mobile
+        if (isMobileViewport) {
+          phoneBtn.style.setProperty('position', 'absolute', 'important');
+          phoneBtn.style.setProperty('top', '0', 'important');
+          phoneBtn.style.setProperty('bottom', '0', 'important');
+          phoneBtn.style.setProperty('margin-top', 'auto', 'important');
+          phoneBtn.style.setProperty('margin-bottom', 'auto', 'important');
+          phoneBtn.style.setProperty('z-index', '1001', 'important');
+          
+          // Clear any inline left/right so CSS can take over based on html[dir]
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          
+          console.log('[Navbar] Phone button positioning applied (mobile viewport)');
+        } else {
+          // On desktop, clear any positioning styles to let CSS handle it
+          phoneBtn.style.removeProperty('position');
+          phoneBtn.style.removeProperty('top');
+          phoneBtn.style.removeProperty('transform');
+          phoneBtn.style.removeProperty('z-index');
+          phoneBtn.style.removeProperty('left');
+          phoneBtn.style.removeProperty('right');
+          console.log('[Navbar] Desktop viewport - cleared phone button inline positioning');
+        }
+      }
+    } else {
+      console.log('[Navbar] Could not parse background color:', bgColor);
+    }
+    
+    // MOBILE MENU TOGGLE
+    // Re-query in case DOM changed (mobileToggle already declared at top of function)
+    mobileToggle = document.getElementById('mobileToggle') ||
+                   document.querySelector('.mobile-toggle') ||
+                   document.querySelector('.hamburger') ||
+                   document.querySelector('.hamburger-menu') ||
+                   document.querySelector('.menu-toggle') ||
+                   document.querySelector('.burger-menu') ||
+                   document.querySelector('[aria-label="Menu"]') ||
+                   document.querySelector('[aria-label="תפריט"]');
+    
+    // EXPANDED SEARCH: Find nav menu by ID or class
+    const navMenu = document.getElementById('navMenu') ||
+                  document.querySelector('.nav-menu') ||
+                  document.querySelector('.nav-links') ||
+                  document.querySelector('nav ul:not(.submenu)');
+    
+    if (!mobileToggle || !navMenu) {
+      console.log('[Navbar] Mobile toggle or menu not found:', { toggle: !!mobileToggle, menu: !!navMenu });
+      return;
+    }
+    
+    // Ensure navMenu has ID for CSS targeting
+    if (!navMenu.id) {
+      navMenu.id = 'navMenu';
+    }
+    
+    console.log('[Navbar] Initializing mobile menu...');
+    
+    // Remove any existing event listeners by cloning the button
+    const newToggle = mobileToggle.cloneNode(true);
+    mobileToggle.parentNode.replaceChild(newToggle, mobileToggle);
+    
+    // Toggle menu handler (shared by click and touchend)
+    function handleToggle(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+      const closeIcon = newToggle.querySelector('.close-icon');
+      const isActive = navMenu.classList.contains('active');
+      
+      if (isActive) {
+        // Close menu
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed');
+      } else {
+        // Open menu
+        navMenu.classList.add('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'none', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'block', 'important');
+        document.body.style.overflow = 'hidden';
+        console.log('[Navbar] Menu opened');
+      }
+    }
+    
+    // Use click for desktop/emulation and touchend as iOS Safari fallback.
+    // Prevent double-fire with a timestamp guard.
+    var lastToggleTime = 0;
+    function guardedToggle(e) {
+      var now = Date.now();
+      if (now - lastToggleTime < 300) return;
+      lastToggleTime = now;
+      handleToggle(e);
+    }
+    
+    newToggle.addEventListener('click', guardedToggle);
+    newToggle.addEventListener('touchend', guardedToggle);
+    
+    // Close menu when clicking nav links (but NOT dropdown toggles)
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        // Don't close if it's a dropdown child (unless it's a real navigation link)
+        if (this.getAttribute('href') === '#') return;
+        
+        const hamburgerIcon = newToggle.querySelector('.hamburger-icon');
+        const closeIcon = newToggle.querySelector('.close-icon');
+        
+        navMenu.classList.remove('active');
+        if (hamburgerIcon) hamburgerIcon.style.setProperty('display', 'block', 'important');
+        if (closeIcon) closeIcon.style.setProperty('display', 'none', 'important');
+        document.body.style.overflow = '';
+        console.log('[Navbar] Menu closed (link clicked)');
+      });
+    });
+    
+    // DROPDOWN MENU TOGGLE (for mobile and touch devices)
+    var dropdownToggles = navMenu.querySelectorAll('.dropdown-toggle');
+    dropdownToggles.forEach(function(toggle) {
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var parent = this.closest('.nav-dropdown');
+        if (!parent) return;
+        
+        // Close other open dropdowns at the same level
+        var siblings = parent.parentNode.querySelectorAll('.nav-dropdown.open');
+        siblings.forEach(function(sib) {
+          if (sib !== parent) sib.classList.remove('open');
+        });
+        
+        parent.classList.toggle('open');
+        console.log('[Navbar] Dropdown toggled:', parent.classList.contains('open') ? 'open' : 'closed');
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.nav-dropdown')) {
+        var openDropdowns = document.querySelectorAll('.nav-dropdown.open');
+        openDropdowns.forEach(function(dd) { dd.classList.remove('open'); });
+      }
+    });
+    
+    console.log('[Navbar] Dropdown handlers initialized for ' + dropdownToggles.length + ' dropdowns');
+    
+    // Phone button functionality (phoneBtn already declared at top of function)
+    if (phoneBtn) {
+      phoneBtn.addEventListener('click', function() {
+        // Get phone number from placeholder in page or use default
+        const phoneLinks = document.querySelectorAll('a[href^="tel:"]');
+        const phoneNumber = phoneLinks.length > 0 
+          ? phoneLinks[0].getAttribute('href').replace('tel:', '')
+          : '[business_phone]';
+        
+        window.location.href = 'tel:' + phoneNumber;
+        console.log('[Navbar] Phone button clicked');
+      });
+    }
+    
+    console.log('[Navbar] Mobile menu initialized successfully');
+    
+    // WhatsApp button visibility is now controlled via CSS (siteSettings).
+    // No JS-based desktop hiding — the button is visible on both mobile and desktop by default.
+  });
+})();
+
+</script>
+  
+  <main>
+    <section class="archive-highlights-intro-section" data-layout-spec="Archive Highlights-intro" dir="rtl">
+
+  <!-- Scattered dots decorative motif -->
+  <div class="ahis-dots-decoration" aria-hidden="true">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="300" height="300">
+      <pattern id="ahis-dot-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+        <circle cx="2" cy="2" r="1.5" fill="#C9A34A" opacity="0.12"></circle>
+      </pattern>
+      <rect width="300" height="300" fill="url(#ahis-dot-pattern)"></rect>
+    </svg>
+  </div>
+
+  <div class="ahis-container">
+
+    <!-- Centered intro text block -->
+    <div class="ahis-intro-block">
+      <div class="ahis-accent-rule" aria-hidden="true">
+        <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 200 12" xmlns="http://www.w3.org/2000/svg" width="200" height="12">
+          <line x1="0" y1="6" x2="82" y2="6" stroke="#C9A34A" stroke-width="1.5" opacity="0.7"></line>
+          <polygon points="100,1 107,6 100,11 93,6" fill="#C9A34A" opacity="0.7"></polygon>
+          <line x1="118" y1="6" x2="200" y2="6" stroke="#C9A34A" stroke-width="1.5" opacity="0.7"></line>
+        </svg>
+      </div>
+      <p class="ahis-eyebrow">הארכיון האישי</p>
+      <h1 class="ahis-heading">רגעים נבחרים מהאוסף</h1>
+      <p class="ahis-description">כאן מוצגים פריטים נבחרים מהארכיון האישי של ORIAN_9 — חולצות כדורגל אייקוניות, גביעים בלתי נשכחים, כדורים עם היסטוריה, ומזכרות שכל אחת מהן מספרת סיפור. זהו מרחב דיגיטלי אישי, מסודר ומוקפד, שנבנה מאהבה אמיתית למשחק היפה.</p>
+    </div>
+
+    <!-- Four-tile mosaic grid -->
+    <div class="ahis-mosaic-grid">
+
+      <!-- Tile 1: Jerseys -->
+      <article class="ahis-tile">
+        <figure class="ahis-tile-figure">
+          <img data-placeholder="archive-highlights-intro-image-1" data-context="Iconic football jersey displayed flat on a clean white surface, museum-style presentation, number 9 visible, high-quality fabric detail, editorial photography with soft natural lighting, football memorabilia collection" width="600" height="400" src="/assets/site-archive-highlights-intro-image-1.webp" alt="חולצת כדורגל אייקונית מהאוסף האישי">
+        </figure>
+        <div class="ahis-tile-caption">
+          <span class="ahis-tile-category">חולצות</span>
+          <h3 class="ahis-tile-title">חולצות אייקוניות</h3>
+          <p class="ahis-tile-desc">קולקציית חולצות כדורגל נדירות מקבוצות וליגות ברחבי העולם, כל אחת עם סיפור משלה.</p>
+        </div>
+      </article>
+
+      <!-- Tile 2: Trophies -->
+      <article class="ahis-tile">
+        <figure class="ahis-tile-figure">
+          <img data-placeholder="archive-highlights-intro-image-2" data-context="Football trophy cup displayed on a dark velvet surface with dramatic lighting, gold trophy gleaming, museum exhibit style, football championship memorabilia, editorial still life photography" width="600" height="400" src="/assets/site-archive-highlights-intro-image-2.webp" alt="גביע כדורגל מהאוסף האישי">
+        </figure>
+        <div class="ahis-tile-caption">
+          <span class="ahis-tile-category">גביעים</span>
+          <h3 class="ahis-tile-title">רגעי ניצחון</h3>
+          <p class="ahis-tile-desc">גביעים ועיטורים המציינים רגעי שיא ואת הרוח התחרותית שמניעה את האהבה לכדורגל.</p>
+        </div>
+      </article>
+
+      <!-- Tile 3: Footballs -->
+      <article class="ahis-tile">
+        <figure class="ahis-tile-figure">
+          <img data-placeholder="archive-highlights-intro-image-3" data-context="Collection of signed footballs arranged artistically on a wooden shelf, various classic football designs, signed match balls, editorial archive photography, warm ambient lighting, personal football collection display" width="600" height="400" src="/assets/site-archive-highlights-intro-image-3.webp" alt="כדורי כדורגל מהאוסף האישי">
+        </figure>
+        <div class="ahis-tile-caption">
+          <span class="ahis-tile-category">כדורים</span>
+          <h3 class="ahis-tile-title">כדורים עם היסטוריה</h3>
+          <p class="ahis-tile-desc">כדורים חתומים ומשחקים מגביעים ומשחקים בלתי נשכחים — כל כדור שמור ומתועד בקפידה.</p>
+        </div>
+      </article>
+
+      <!-- Tile 4: Memorabilia -->
+      <article class="ahis-tile">
+        <figure class="ahis-tile-figure">
+          <img data-placeholder="archive-highlights-intro-image-4" data-context="Assorted football memorabilia collection laid out on a table: scarves, badges, programs, stickers, photographs, flat lay editorial photography, personal football archive, museum catalog style, warm tones" width="600" height="400" src="/assets/site-archive-highlights-intro-image-4.webp" alt="מזכרות כדורגל מהאוסף האישי">
+        </figure>
+        <div class="ahis-tile-caption">
+          <span class="ahis-tile-category">מזכרות</span>
+          <h3 class="ahis-tile-title">אוצרות מהמשחק היפה</h3>
+          <p class="ahis-tile-desc">תוכניות משחק, תגים, צעיפים ופריטי אספנות נדירים — כל פריט מתועד כחלק מארכיון ספורט כדורגל אישי.</p>
+        </div>
+      </article>
+
+    </div>
+    <!-- end mosaic grid -->
+
+  </div>
+  <!-- end container -->
+
+  <!-- Bottom scalloped divider -->
+  <div class="ahis-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 L0,28 Q50,18 100,28 Q150,38 200,28 Q250,18 300,28 Q350,38 400,28 Q450,18 500,28 Q550,38 600,28 Q650,18 700,28 Q750,38 800,28 Q850,18 900,28 Q950,38 1000,28 Q1050,18 1100,28 Q1150,38 1200,28 L1200,60 Z" fill="#FAFAF7"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section class="archive-highlights-portfolio-section" data-layout-spec="Archive Highlights-portfolio" dir="rtl">
+  <div class="ahp-container">
+    <div class="ahp-inner">
+
+      <!-- Text Column (START = RIGHT in RTL) -->
+      <div class="ahp-text-col">
+
+        <!-- Gold accent rule -->
+        <div class="ahp-accent-rule" aria-hidden="true">
+          <svg data-no-icon-edit="true" aria-hidden="true" width="120" height="12" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="0" y1="6" x2="50" y2="6" stroke="#C9A34A" stroke-width="1.5" opacity="0.7"></line>
+            <polygon points="60,1 65,6 60,11 55,6" fill="#C9A34A" opacity="0.7"></polygon>
+            <line x1="70" y1="6" x2="120" y2="6" stroke="#C9A34A" stroke-width="1.5" opacity="0.7"></line>
+          </svg>
+        </div>
+
+        <span class="ahp-label">ארכיון אישי</span>
+        <h2 class="ahp-heading">רגעים שנחרתו בזיכרון</h2>
+        <p class="ahp-intro">כל פריט באוסף הוא יותר מסתם ציוד — הוא שבר זמן, ריח של דשא, צעקה בטריבונה. כאן מוצגים הפריטים הבולטים ביותר מהארכיון של ORIAN_9, כל אחד עם הסיפור שעומד מאחוריו.</p>
+
+        <!-- Artifact Notes -->
+        <div class="ahp-artifacts">
+
+          <article class="ahp-artifact-item">
+            <div class="ahp-artifact-num" aria-hidden="true">01</div>
+            <div class="ahp-artifact-content">
+              <h3 class="ahp-artifact-title">חולצת ברצלונה — עונת 2010/11</h3>
+              <p class="ahp-artifact-desc">חולצת המשחק המקורית מהעונה ההיסטורית בה זכה הקלאסיקו בתוצאה של 5–0. נרכשה ישירות מהחנות הרשמית ב-Camp Nou — שמורה בכיסוי מגן מאז.</p>
+            </div>
+          </article>
+
+          <article class="ahp-artifact-item">
+            <div class="ahp-artifact-num" aria-hidden="true">02</div>
+            <div class="ahp-artifact-content">
+              <h3 class="ahp-artifact-title">כדור גמר ליגת האלופות 2019</h3>
+              <p class="ahp-artifact-desc">כדור משחק רשמי מגמר מדריד. החתימות על פניו שייכות לשחקנים שהיו בשטח באותו לילה — כל אחת מהן מספרת פרק אחר.</p>
+            </div>
+          </article>
+
+          <article class="ahp-artifact-item">
+            <div class="ahp-artifact-num" aria-hidden="true">03</div>
+            <div class="ahp-artifact-content">
+              <h3 class="ahp-artifact-title">גביע אליפות הנוער האזורי 2017</h3>
+              <p class="ahp-artifact-desc">הגביע הראשון שנכנס לאוסף — לא של קבוצה גדולה, אלא של הקבוצה שלנו. משקל הפח הזה שווה יותר מכל זהב.</p>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Metadata Strip -->
+        <div class="ahp-meta-strip">
+          <div class="ahp-meta-item">
+            <span class="ahp-meta-label">שנת ייסוד</span>
+            <span class="ahp-meta-value">2009</span>
+          </div>
+          <div class="ahp-meta-divider" aria-hidden="true"></div>
+          <div class="ahp-meta-item">
+            <span class="ahp-meta-label">פריטים בארכיון</span>
+            <span class="ahp-meta-value">47+</span>
+          </div>
+          <div class="ahp-meta-divider" aria-hidden="true"></div>
+          <div class="ahp-meta-item">
+            <span class="ahp-meta-label">מקור</span>
+            <span class="ahp-meta-value">אישי</span>
+          </div>
+        </div>
+
+      </div>
+      <!-- /Text Column -->
+
+      <!-- Image Plate (END = LEFT in RTL) -->
+      <div class="ahp-image-col">
+        <div class="ahp-image-frame">
+          <div class="ahp-frame-border" aria-hidden="true"></div>
+          <figure class="ahp-figure">
+            <img data-placeholder="archive-highlights-portfolio-image-1" data-context="A dramatic close-up flat-lay of premium football memorabilia arranged on a clean white surface: a vintage Barcelona 2010/11 match jersey folded neatly, a signed Champions League match ball, and a small regional youth trophy. Soft natural light casts gentle shadows. The composition is editorial and museum-quality — precise, elegant, nostalgic. Warm gold tones complement the deep green and white of the jerseys." width="720" height="900" src="/assets/site-archive-highlights-portfolio-image-1.webp" alt="פריטי ארכיון כדורגל — חולצות, כדורים וגביעים מהאוסף האישי של ORIAN_9">
+          </figure>
+          <!-- Subtle corner accent -->
+          <div class="ahp-corner-tl" aria-hidden="true"></div>
+          <div class="ahp-corner-br" aria-hidden="true"></div>
+        </div>
+
+        <!-- Floating catalog tag -->
+        <div class="ahp-catalog-tag">
+          <span class="ahp-catalog-ref">No. 001</span>
+          <span class="ahp-catalog-desc">פריט מוצג</span>
+        </div>
+      </div>
+      <!-- /Image Plate -->
+
+    </div>
+  </div>
+
+  <!-- Bottom Divider: muted-gold band above dark edge -->
+  <div class="ahp-bottom-transition" aria-hidden="true">
+    <div class="ahp-gold-band"></div>
+    <div class="ahp-dark-edge"></div>
+  </div>
+
+</section>
+
+<section class="archive-highlights-stats-section" data-layout-spec="Archive Highlights-stats" dir="rtl">
+  <div class="ahs-container">
+    <div class="ahs-header">
+      <span class="ahs-gold-rule"></span>
+      <h2 class="ahs-heading">הארכיון שלי במספרים</h2>
+      <p class="ahs-subheading">שנים של אהבה לכדורגל — כל פריט, כל רגע, כל זיכרון</p>
+    </div>
+
+    <div class="ahs-grid">
+
+      <article class="ahs-card">
+        <div class="ahs-card-inner">
+          <div class="ahs-number-wrap">
+            <span class="ahs-number">15</span>
+            <span class="ahs-number-suffix">+</span>
+          </div>
+          <div class="ahs-card-divider"></div>
+          <h3 class="ahs-card-label">שנות אספנות</h3>
+          <p class="ahs-card-desc">מסע אישי שהתחיל בילדות — כל שנה הוסיפה פרק חדש לארכיון הכדורגל</p>
+        </div>
+      </article>
+
+      <article class="ahs-card">
+        <div class="ahs-card-inner">
+          <div class="ahs-number-wrap">
+            <span class="ahs-number">120</span>
+            <span class="ahs-number-suffix">+</span>
+          </div>
+          <div class="ahs-card-divider"></div>
+          <h3 class="ahs-card-label">פריטי אוסף</h3>
+          <p class="ahs-card-desc">חולצות כדורגל, גביעים, כדורים ומזכרות — כל אחד עם סיפור משלו</p>
+        </div>
+      </article>
+
+      <article class="ahs-card">
+        <div class="ahs-card-inner">
+          <div class="ahs-number-wrap">
+            <span class="ahs-number">8</span>
+            <span class="ahs-number-suffix"></span>
+          </div>
+          <div class="ahs-card-divider"></div>
+          <h3 class="ahs-card-label">קטגוריות תיעוד</h3>
+          <p class="ahs-card-desc">חולצות, גביעים, כדורים, תמונות, תוכניות משחק, כרטיסים, ציוד ועוד</p>
+        </div>
+      </article>
+
+      <article class="ahs-card">
+        <div class="ahs-card-inner">
+          <div class="ahs-number-wrap">
+            <span class="ahs-number">47</span>
+            <span class="ahs-number-suffix"></span>
+          </div>
+          <div class="ahs-card-divider"></div>
+          <h3 class="ahs-card-label">רגעי כדורגל מיוחדים</h3>
+          <p class="ahs-card-desc">משחקים, אצטדיונים ורגעים שנחרתו בזיכרון ותועדו לנצח באוסף</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <div class="ahs-arch-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,90 L0,90 Q300,90 600,30 Q900,90 1200,90 L1200,90 Z" fill="#FAFAF7"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="archive-highlights-gallery-section" data-layout-spec="Archive Highlights-gallery" dir="rtl">
+  <div class="archive-highlights-gallery-container">
+
+    <!-- Intro Block -->
+    <div class="archive-gallery-intro">
+      <div class="archive-gallery-intro-accent-line" aria-hidden="true"></div>
+      <h2 class="archive-gallery-heading">גלריית הארכיון</h2>
+      <p class="archive-gallery-desc">רגעים ויזואליים נבחרים מתוך האוסף — חולצות, גביעים, כדורים, צעיפים ופריטי זיכרון שמספרים את הסיפור של כדורגל אישי ואמיתי. כל פריט מתועד בקפידה כחלק מארכיון חי ומתמשך.</p>
+    </div>
+
+    <!-- Six-Image Grid -->
+    <div class="archive-gallery-grid">
+
+      <!-- Image 1 — large, spans 2 rows -->
+      <figure class="archive-gallery-item archive-gallery-item--tall">
+        <div class="archive-gallery-frame">
+          <img data-placeholder="archive-highlights-gallery-image-1" data-context="A flat-lay photograph of a classic football jersey — green and white striped, neatly folded and displayed on a clean white surface, museum-style presentation, editorial lighting, sharp focus on fabric texture and badge detail" width="600" height="800" src="/assets/site-archive-highlights-gallery-image-1.webp" alt="חולצת כדורגל קלאסית מוצגת בסגנון מוזיאלי">
+        </div>
+        <figcaption class="archive-gallery-caption">
+          <span class="archive-gallery-caption-label">חולצות</span>
+          <span class="archive-gallery-caption-title">ירוק ולבן — עונה קלאסית</span>
+        </figcaption>
+      </figure>
+
+      <!-- Image 2 -->
+      <figure class="archive-gallery-item">
+        <div class="archive-gallery-frame">
+          <img data-placeholder="archive-highlights-gallery-image-2" data-context="A polished football trophy cup displayed on a wooden shelf with soft warm lighting, golden surface gleaming, editorial museum-style photography, dark background with focused spotlight, football memorabilia collection" width="600" height="400" src="/assets/site-archive-highlights-gallery-image-2.webp" alt="גביע כדורגל מוזהב על מדף עץ">
+        </div>
+        <figcaption class="archive-gallery-caption">
+          <span class="archive-gallery-caption-label">גביעים</span>
+          <span class="archive-gallery-caption-title">גביע הזהב — אוסף אישי</span>
+        </figcaption>
+      </figure>
+
+      <!-- Image 3 -->
+      <figure class="archive-gallery-item">
+        <div class="archive-gallery-frame">
+          <img data-placeholder="archive-highlights-gallery-image-3" data-context="Close-up detail of a classic black and white football (soccer ball) resting on a light surface, editorial still-life photography, perfect spherical geometry, soft shadows, museum archive aesthetic" width="600" height="400" src="/assets/site-archive-highlights-gallery-image-3.webp" alt="כדור כדורגל קלאסי שחור לבן">
+        </div>
+        <figcaption class="archive-gallery-caption">
+          <span class="archive-gallery-caption-label">כדורים</span>
+          <span class="archive-gallery-caption-title">כדור קלאסי — שחור ולבן</span>
+        </figcaption>
+      </figure>
+
+      <!-- Image 4 — large, spans 2 rows -->
+      <figure class="archive-gallery-item archive-gallery-item--tall">
+        <div class="archive-gallery-frame">
+          <img data-placeholder="archive-highlights-gallery-image-4" data-context="A framed football scarf mounted on a wall — colorful team colors, horizontal display in a thin black frame, gallery wall presentation, editorial football memorabilia photography, clean white wall background" width="600" height="800" src="/assets/site-archive-highlights-gallery-image-4.webp" alt="צעיף כדורגל ממוסגר על קיר">
+        </div>
+        <figcaption class="archive-gallery-caption">
+          <span class="archive-gallery-caption-label">צעיפים</span>
+          <span class="archive-gallery-caption-title">צעיף ממוסגר — מורשת קבוצתית</span>
+        </figcaption>
+      </figure>
+
+      <!-- Image 5 -->
+      <figure class="archive-gallery-item">
+        <div class="archive-gallery-frame">
+          <img data-placeholder="archive-highlights-gallery-image-5" data-context="Overhead flat-lay of various football memorabilia items arranged neatly — pins, badges, ticket stubs, small trophies, on a cream-colored surface, archive catalog photography style, editorial lighting" width="600" height="400" src="/assets/site-archive-highlights-gallery-image-5.webp" alt="פריטי זיכרון כדורגל מסודרים על משטח">
+        </div>
+        <figcaption class="archive-gallery-caption">
+          <span class="archive-gallery-caption-label">פריטי זיכרון</span>
+          <span class="archive-gallery-caption-title">תגים, עיטורים ועוד</span>
+        </figcaption>
+      </figure>
+
+      <!-- Image 6 -->
+      <figure class="archive-gallery-item">
+        <div class="archive-gallery-frame">
+          <img data-placeholder="archive-highlights-gallery-image-6" data-context="Close-up detail shot of the inside of a personal football archive room — shelves lined with jerseys, balls, and trophies, warm ambient light, intimate personal collection feel, editorial documentary photography" width="600" height="400" src="/assets/site-archive-highlights-gallery-image-6.webp" alt="פינת ארכיון כדורגל אישית עם חולצות וגביעים">
+        </div>
+        <figcaption class="archive-gallery-caption">
+          <span class="archive-gallery-caption-label">הארכיון</span>
+          <span class="archive-gallery-caption-title">מבט לתוך האוסף</span>
+        </figcaption>
+      </figure>
+
+    </div>
+    <!-- /grid -->
+
+  </div>
+
+  <!-- Angled paper-fold bottom divider transitioning to deep field green -->
+  <div class="archive-highlights-gallery-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,70 L0,48 L600,8 L1200,48 L1200,70 Z" fill="var(--bg-light)"></path>
+    </svg>
+  </div>
+
+</section>
+
+<section class="archive-highlights-reviews-section" data-layout-spec="Archive Highlights-reviews" dir="rtl">
+  <div class="reviews-container">
+
+    <!-- Section Header -->
+    <header class="reviews-header">
+      <div class="reviews-accent-line" aria-hidden="true"></div>
+      <h2 class="reviews-title">קולות מהמגרש</h2>
+      <p class="reviews-subtitle">מה אומרים חובבי הכדורגל, שחקני נוער וקולקטורים על האוסף, על התשוקה ועל הרוח שמאחורי ORIAN_9.</p>
+    </header>
+
+    <nav class="zappy-catalog-menu rtl" id="zappy-catalog-menu" dir="rtl" style="display:none">
+      <div class="catalog-menu-container">
+        <a href="/products" class="catalog-menu-item catalog-menu-all">כל המוצרים</a>
+        <div class="catalog-menu-categories" id="zappy-category-links">
+          <!-- Categories will be loaded dynamically -->
+        </div>
+      </div>
+    </nav>
+  
+
+    <!-- Quote Cards Grid -->
+    <div class="reviews-grid">
+
+      <!-- Card 1 -->
+      <article class="review-card">
+        <div class="review-quote-mark" aria-hidden="true">“</div>
+        <blockquote class="review-text">
+          האוסף של ORIAN_9 הוא לא סתם חולצות וכדורים — זה תיעוד אמיתי של ספורט כדורגל ישראלי ועולמי. כל פריט מספר סיפור, כל גביע מחזיר אותך לרגע שלא תשכח.
+        </blockquote>
+        <footer class="review-author">
+          <div class="review-author-avatar" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+              <circle cx="20" cy="20" r="20" fill="var(--border-light)"></circle>
+              <circle cx="20" cy="16" r="7" fill="var(--text-muted)"></circle>
+              <ellipse cx="20" cy="34" rx="11" ry="7" fill="var(--text-muted)"></ellipse>
+            </svg>
+          </div>
+          <div class="review-author-info">
+            <span class="review-author-name">יובל כהן</span>
+            <span class="review-author-role">שחקן נוער, מכבי תל אביב</span>
+          </div>
+        </footer>
+        <div class="review-stars" aria-label="דירוג 5 כוכבים">
+          <span aria-hidden="true">★★★★★</span>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="review-card review-card--featured">
+        <div class="review-quote-mark" aria-hidden="true">“</div>
+        <blockquote class="review-text">
+          נכנסתי לאתר ופשוט לא יכולתי להפסיק לגלול. החולצות מוצגות כמו יצירות אמנות, הגביעים מסודרים כמו במוזיאון. זה האתר שכל אוהב כדורגל חלם עליו.
+        </blockquote>
+        <footer class="review-author">
+          <div class="review-author-avatar" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+              <circle cx="20" cy="20" r="20" fill="var(--border-light)"></circle>
+              <circle cx="20" cy="16" r="7" fill="var(--text-muted)"></circle>
+              <ellipse cx="20" cy="34" rx="11" ry="7" fill="var(--text-muted)"></ellipse>
+            </svg>
+          </div>
+          <div class="review-author-info">
+            <span class="review-author-name">נועה לוי</span>
+            <span class="review-author-role">קולקטורית כדורגל ומעצבת</span>
+          </div>
+        </footer>
+        <div class="review-stars" aria-label="דירוג 5 כוכבים">
+          <span aria-hidden="true">★★★★★</span>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="review-card">
+        <div class="review-quote-mark" aria-hidden="true">“</div>
+        <blockquote class="review-text">
+          כשאני רוצה להתעורר בבוקר עם מוטיבציה, אני נכנס לאוסף. חולצות כדורגל לקבוצות נוער, כדורים עם היסטוריה, פריטים שמרגישים כמו נגיעה בגדולה. מקום שמכבד את המשחק.
+        </blockquote>
+        <footer class="review-author">
+          <div class="review-author-avatar" aria-hidden="true">
+            <svg data-element-type="icon" data-icon-type="svg" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+              <circle cx="20" cy="20" r="20" fill="var(--border-light)"></circle>
+              <circle cx="20" cy="16" r="7" fill="var(--text-muted)"></circle>
+              <ellipse cx="20" cy="34" rx="11" ry="7" fill="var(--text-muted)"></ellipse>
+            </svg>
+          </div>
+          <div class="review-author-info">
+            <span class="review-author-name">אמיר דוד</span>
+            <span class="review-author-role">מאמן נוער ואוהד כדורגל</span>
+          </div>
+        </footer>
+        <div class="review-stars" aria-label="דירוג 5 כוכבים">
+          <span aria-hidden="true">★★★★★</span>
+        </div>
+      </article>
+
+    </div>
+    <!-- End Grid -->
+
+    <!-- Closing Divider -->
+    <div class="reviews-bottom-rule" aria-hidden="true"></div>
+
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer" dir="rtl">
+  <div class="footer-inner">
+    <div class="footer-top">
+
+      <!-- Column 1: Company Info -->
+      <div class="footer-col footer-brand">
+        <div class="footer-logo-wrap">
+          <img src="/assets/9-logo.webp" alt="אוריין_9" class="logo">
+        </div>
+        <p class="footer-tagline">ארכיון כדורגל אישי — חפצים, זיכרונות ורגעים שנשמרו בקפידה.</p>
+        <div class="footer-accent-line"></div>
+        <div class="footer-social">
+          <a href="[facebook_handle]" aria-label="Facebook" class="social-link"><i class="fab fa-facebook-f"></i></a>
+          <a href="[instagram_handle]" aria-label="Instagram" class="social-link"><i class="fab fa-instagram"></i></a>
+          <a href="[whatsapp_handle]" aria-label="WhatsApp" class="social-link"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <!-- Column 2: Quick Links -->
+      <div class="footer-col footer-nav">
+        <h4 class="footer-heading">ניווט מהיר</h4>
+        <ul class="footer-links">
+          <li><a href="/">ראשי</a></li>
+          <li><a href="/archive-highlights">רגעים מהארכיון</a></li>
+          <li><a href="/about">אודות</a></li>
+          <li><a href="/contact">צור קשר</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: Contact Info -->
+      <div class="footer-col footer-contact-col">
+        <h4 class="footer-heading">יצירת קשר</h4>
+        <ul class="footer-contact">
+          <li>
+            <span class="contact-icon"><i class="fas fa-envelope"></i></span>
+            <span class="contact-text"><a href="mailto:[business_email]">[business_email]</a></span>
+          </li>
+          <li>
+            <span class="contact-icon"><i class="fas fa-phone"></i></span>
+            <span class="contact-text"><a href="tel:[business_phone]">[business_phone]</a></span>
+          </li>
+          <li><a href="/"><span class="contact-icon"><i class="fas fa-map-marker-alt"></i></span>
+            <span class="contact-text">[business_address]</span></a></li>
+        </ul>
+      </div>
+
+      <!-- Column 4: About Snippet -->
+      <div class="footer-col footer-about">
+        <h4 class="footer-heading">אוריין_9</h4>
+        <p class="footer-about-text">אוסף אישי של חפצי כדורגל — גופיות, גביעים, כדורים ורגעים שנרכשו בהתלהבות ושמורים ברוח מוזיאלית. כל פריט מספר סיפור.</p>
+        <div class="footer-badge">
+          <span class="badge-icon"><i class="fas fa-shield-alt"></i></span>
+          <span class="badge-text">אוסף מאומת ואישי</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <span class="footer-copyright">© 2026 אוריין_9. כל הזכויות שמורות.</span>
+      <div class="footer-legal">
+        <a href="/privacy">מדיניות פרטיות</a>
+        <span class="legal-sep">·</span>
+        <a href="/terms">תנאי שימוש</a><span class="separator">|</span>
+            <a href="/return-policy" aria-label="מדיניות החזרות">
+              מדיניות החזרות
+            </a>
+        <span class="legal-sep">·</span>
+        <a href="/accessibility">נגישות</a>
+        <span class="legal-sep">·</span>
+        <a href="https://zappy5.com" target="_blank" class="zappy-attribution">נוצר באמצעות Zappy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+</body>
+</html>

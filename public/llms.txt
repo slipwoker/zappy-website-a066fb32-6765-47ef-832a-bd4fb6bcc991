@@ -1,0 +1,87 @@
+# אוריין_9 — Generative Engine Optimization Map
+
+> ORIAN_9 is a personal football-themed website for a single user, serving as a private showcase and collection hub for all things football. The site features jerseys, trophies, balls, and a wide range of football memorabilia and gear. The vibe is passionate, personal, and football-obsessed — a dedicated digital space celebrating the beautiful game.
+
+---
+
+## Pages
+
+### Home
+https://9-a066fb32.zappy5.app
+ORIAN_9 is a personal football-themed website for a single user, serving as a private showcase and collection hub for all things football. The site features jer
+
+### Archive Highlights
+https://9-a066fb32.zappy5.app/archive-highlights
+ארכיון הדגשים | אוריין_9. ספורט / כדורגל
+
+### About
+https://9-a066fb32.zappy5.app/about
+אודות | אוריין_9. ספורט / כדורגל
+
+### Contact
+https://9-a066fb32.zappy5.app/contact
+Contact | אוריין_9. ספורט / כדורגל
+
+### Products
+https://9-a066fb32.zappy5.app/products
+המוצרים שלנו - אוריין_9
+
+### Product Detail
+https://9-a066fb32.zappy5.app/product/:slug
+פרטי המוצר - אוריין_9
+
+### Category
+https://9-a066fb32.zappy5.app/category/:slug
+מוצרים - אוריין_9
+
+## Legal & Policy
+
+### Privacy Policy
+https://9-a066fb32.zappy5.app/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://9-a066fb32.zappy5.app/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://9-a066fb32.zappy5.app/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+## Products
+
+_No products are currently configured._
+
+---
+
+# Business Context (for LLM understanding)
+
+## About אוריין_9
+ORIAN_9 is a personal football-themed website for a single user, serving as a private showcase and collection hub for all things football. The site features jerseys, trophies, balls, and a wide range of football memorabilia and gear. The vibe is passionate, personal, and football-obsessed — a dedicated digital space celebrating the beautiful game.
+
+## Services/Products
+- חולצות כדורגל
+- גביעים
+- כדורים
+- ציוד כדורגל כללי
+
+## Target Audience
+- שימוש אישי בלבד
+- חובבי כדורגל לשימוש אישי
+- קבוצות כדורגל נוער
+- אספני מזכרות כדורגל
+
+## Industry
+ספורט / כדורגל
+
+---
+
+# Machine-readable feeds
+
+- Sitemap (XML): https://9-a066fb32.zappy5.app/sitemap.xml
+- Robots: https://9-a066fb32.zappy5.app/robots.txt
+- Flattened page text (for LLMs): https://9-a066fb32.zappy5.app/llms-full.txt
+- Products (JSON): https://9-a066fb32.zappy5.app/products.json
+- Products (Google Merchant RSS): https://9-a066fb32.zappy5.app/product-feed.xml
